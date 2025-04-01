@@ -1,6 +1,5 @@
 #include <stdio.h>
 
-
 enum {
 
 	ERR=-1,
@@ -11,15 +10,25 @@ enum {
 	LP=4,
 	RP=5,
 	ID=6,
-	PRINT,
-	EQL,
+	PRINT=7,
+	EQL=8,
 
 	//return
 	RET
-
+	
 } token;
 int num;
 int array[26];
+
+
+int term();
+int expr();
+int error();
+int factor();
+
+
+//이 array 정체는 알파벳 id 저장하는 칸이어씀 
+// 
 
 
 
@@ -30,35 +39,80 @@ void get_token() {
 	int ch;
 	ch = getchar();
 
+	//확인용
+	//printf("\ncheck:%c",ch);
 
-	if (48<=ch<=57) {
-	
-		token == NUMBER;
+
+	//PRINT
+	if (ch == 'p') {
+		get_token();
+		if(ch=='r')
+			get_token();
+		if (ch == 'i')
+			get_token();
+		if (ch == 'n')
+			get_token();
+		if (ch == 't')
+			token = PRINT;
+			return;
+			
 	}
+
+
+
 	else {
-		switch (ch) {
-		case 43:
-			token == PLUS;
-			break;
-		case 42:
-			token == STAR;
-			break;
-		case 40:
-			token == LP;
-			break;
-		case 41:
-			token == RP;
-			break;
-		case 61:
-			token == EQL;
-			break;
+
+		//NUMBER
+		if (48 <= ch && ch <= 57) {
+
+			token = NUMBER;
+			num = ch;
+			return;
+		}
+
+		//ID
+		else if ('a' <= ch && ch <= 'z') {
+
+			num = ch - 97;
+			token = ID;
+			get_token();
 
 
-		default:
-		
-			break;
+		}
+
+		else {
+			switch (ch) {
+			case '+':
+				token = PLUS;
+				get_token();
+				break;
+			case '*':
+				token = STAR;
+				get_token();
+				break;
+			case '(':
+				token = LP;
+				get_token();
+				break;
+			case ')':
+				token = RP;
+				
+				break;
+			case '=':
+				token = EQL;
+				expr();
+				break;
 
 
+			default:
+
+				error();
+				break;
+
+
+			}
+			
+			return;
 
 		}
 
@@ -69,19 +123,36 @@ void get_token() {
 
 
 
-
-
-
 }
 void statement() {
-	int r;
+
+	
 	if (token == ID) {
 		get_token();
+		if (token == EQL)
+			expr();
+	}
+
 	
+		///////////////////////////////////////////////
+
+	//print 를 친게 검출되면 expr 호출 
+
+
+	if (token == PRINT) {
+		expr();
+		printf("\n");
+
+	}
+
+	if (token == EQL) {
+		expr();
+
 	}
 
 
 
+	get_token();
 
 }
 int expr() {
@@ -102,6 +173,8 @@ int term() {
 	}
 	return (r);
 }
+
+
 int factor() {
 	int r;
 	if (token == NUMBER) {
@@ -126,8 +199,15 @@ int factor() {
 }
 void main() {
 
-	get_token();
-	statement();
+	
+		get_token();
+		statement();
 	
 }
-error() { … }
+int error() {
+
+	printf("error!");
+	return -1;
+
+	
+}
