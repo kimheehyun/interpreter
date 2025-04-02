@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 enum {
-
+  //¤¾¤·
 	ERR=-1,
 
 	PLUS=1,
