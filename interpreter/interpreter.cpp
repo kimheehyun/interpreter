@@ -29,32 +29,6 @@ int idx;
 int array[26];
 
 
-int term();
-int expr();
-int error();
-int factor();
-
-
-//이 array 정체는 알파벳 id 저장하는 칸이어씀 
-// 
-
-
-
-//이 array 정체는 알파벳 id 저장하는 칸이어씀 
-// 
-
-
-
-//이 array 정체는 알파벳 id 저장하는 칸이어씀 
-// 
-
-
-
-//이 array 정체는 알파벳 id 저장하는 칸이어씀 
-// 
-
-
-
 void get_token() {
     /* next token --> token */
     /* number value or id index --> num */
@@ -68,24 +42,30 @@ void get_token() {
     //printf("\ncheck:%c",ch);
 
 
-	//PRINT
-	if (ch == 'p') {
-		get_token();
-		if(ch=='r')
-			get_token();
-		if (ch == 'i')
-			get_token();
-		if (ch == 'n')
-			get_token();
-		if (ch == 't')
-			token = PRINT;
-			return;
-			
-	}
 
+    // 공백 재낌.
+    if (ch == ' ') {
+        ch = getchar();
 
+    }
 
-	else {
+    //PRINT
+
+    if (ch == 'p') {
+
+        if ((ch = getchar()) == 'r' &&
+            (ch = getchar()) == 'i' &&
+            (ch = getchar()) == 'n' &&
+            (ch = getchar()) == 't') {
+
+            token = PRINT;
+            ch = getchar();
+            return;
+        }
+        error();
+    }
+
+    else {
 
         //NUMBER 0~9
         if (48 <= ch && ch <= 57) {
@@ -105,41 +85,32 @@ void get_token() {
         //ID
         else if ('a' <= ch && ch <= 'z') {
 
-			num = ch - 97;
-			token = ID;
-			get_token();
+
+            token = ID;
 
 
-		}
 
-		else {
-			switch (ch) {
-			case '+':
-				token = PLUS;
-				get_token();
-				break;
-			case '*':
-				token = STAR;
-				get_token();
-				break;
-			case '(':
-				token = LP;
-				get_token();
-				break;
-			case ')':
-				token = RP;
-				
-				break;
-			case '=':
-				token = EQL;
-				expr();
-				break;
+            // 아 저장을 해야됨.!!!!!!11
+            // num 에 알파벳 저장
 
+            // 여기 지나니까 num 값이 변하는 거임. 
+
+
+            idx = ch - 97;
 
             return;
 
         }
 
+        else {
+            switch (ch) {
+            case '+': token = PLUS; break;
+            case '*': token = STAR;  break;
+            case '(':token = LP;  break;
+            case ')': token = RP;  break;
+            case '=': token = EQL;   array[idx] = num;   break;
+            case '\n': token = ENT;  break;
+            default:  error();
 
             }
         }
@@ -163,12 +134,8 @@ void statement() {
 
         if (token == EQL) {
 
-	
-	if (token == ID) {
-		get_token();
-		if (token == EQL)
-			expr();
-	}
+
+            get_token();
 
 
             //저장.
