@@ -19,6 +19,7 @@ enum {
 
 } token;
 int num;
+int idx;
 int array[26];
 
 
@@ -34,6 +35,8 @@ int factor();
 void get_token() {
     /* next token --> token */
     /* number value or id index --> num */
+
+    int tmp;
 
     int ch;
     ch = getchar();
@@ -93,9 +96,20 @@ void get_token() {
 
             token = ID;
 
+            tmp = num;
 
+            // 아 저장을 해야됨.!!!!!!11
             // num 에 알파벳 저장
-            num = ch - 97;
+            
+            // 여기 지나니까 num 값이 변하는 거임. 
+
+
+
+
+            idx = ch - 97;
+
+            array[idx] = tmp;
+
             return;
 
         }
@@ -147,14 +161,20 @@ void statement() {
     // ID=> =-> EXPR => /N 
     if (token == ID) {
 
+        // id 의 인덱스
+        r = idx;
 
-        r = num;
         get_token();
+
+
         if (token == EQL) {
 
 
             get_token();
 
+
+
+            //저장.
             array[r] = num;
 
             //확인용
@@ -165,16 +185,12 @@ void statement() {
             //ID 다음 토큰이 EXR 인지
             expr();
 
-
         }
 
         else
         {
             error();
         }
-
-
-
     }
 
     ///////////////////////////////////////////////
@@ -217,20 +233,26 @@ int factor() {
     int r = 0;
 
     if (token == NUMBER) {
+
         r = num;
+
+
         //확인용
         //printf("rrrrrrrrrrrrr: %d\n", r);
 
         get_token();
     }
     else if (token == ID) {
-        r = array[num];
+
+        r = array[idx];
         get_token();
     }
     else if (token == LP) {
         get_token();
+
+        
         r = expr();
-        printf("%d",r);
+        //printf("%d", r);
         if (token == RP)
             get_token();
         else
