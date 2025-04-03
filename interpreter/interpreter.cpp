@@ -73,6 +73,7 @@ void get_token() {
 
     else {
 
+
         //NUMBER 0~9
         if (48 <= ch && ch <= 57) {
 
@@ -152,11 +153,14 @@ void statement() {
 
             get_token();
 
+
+            //????????
             array[r] = num;
 
             //확인용
             //printf("r: %d\n",r);
             //printf("array[r]:%d",array[r]);
+
 
 
             //ID 다음 토큰이 EXR 인지
@@ -181,7 +185,7 @@ void statement() {
     else if (token == PRINT) {
         get_token();
         r = expr();
-        printf("> %d\n", r);
+        //printf("> %d\n", r);
     }
 
     else {
@@ -211,7 +215,11 @@ int term() {
 
 
 int factor() {
-    int r = 0;
+
+
+// 아 LP 갔다가EXPR 다시 와서 
+    int r =0;
+    int tmp=0;
 
     if (token == NUMBER) {
         r = num;
@@ -226,15 +234,18 @@ int factor() {
     }
     else if (token == LP) {
         get_token();
-        r = expr();
+        tmp = num;
+        expr();
         if (token == RP)
+
             get_token();
         else
             error();
     }
     else
         error();
-    return (r);
+
+    return r;
 }
 void main() {
 
