@@ -1,4 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
+int term();
+int expr();
+int error();
+int factor();
+
 
 enum {
 
@@ -23,10 +29,7 @@ int idx;
 int array[26];
 
 
-int term();
-int expr();
-int error();
-int factor();
+
 
 //이 array 정체는 알파벳 id 저장하는 칸이어씀 
 // 주어진 문법이 맞는지 아닌지.!!!!!!!!!!!!!!!!!!11 목적!!!!!!!!!11
@@ -53,24 +56,22 @@ void get_token() {
     }
 
     //PRINT
+     // "print" 토큰 확인
     if (ch == 'p') {
-        ch = getchar();
 
-        if (ch == 'r')
-            ch = getchar();
+        if ((ch = getchar()) == 'r' &&
+            (ch = getchar()) == 'i' &&
+            (ch = getchar()) == 'n' &&
+            (ch = getchar()) == 't') {
 
-        if (ch == 'i')
-            ch = getchar();
-
-        if (ch == 'n')
-            ch = getchar();
-
-        if (ch == 't')
             token = PRINT;
-        ch = getchar();
-        return;
-
+            ch = getchar();  // 다음 문자 읽기
+            return;
+        }
+        error();
     }
+
+    
 
 
 
@@ -100,10 +101,8 @@ void get_token() {
 
             // 아 저장을 해야됨.!!!!!!11
             // num 에 알파벳 저장
-            
+
             // 여기 지나니까 num 값이 변하는 거임. 
-
-
 
 
             idx = ch - 97;
@@ -116,39 +115,16 @@ void get_token() {
 
         else {
             switch (ch) {
-            case '+':
-                token = PLUS;
-                break;
-            case '*':
-                token = STAR;
-                break;
-            case '(':
-                token = LP;
-                break;
-            case ')':
-                token = RP;
-
-                break;
-            case '=':
-                token = EQL;
-                break;
-
-            case '\n':
-                token = ENT;
-                break;
-
-
-            default:
-
-                error();
-                break;
+            case '+': token = PLUS; break;
+            case '*': token = STAR;  break;
+            case '(':token = LP;  break;
+            case ')': token = RP;  break;
+            case '=': token = EQL;  break;
+            case '\n': token = ENT;  break;
+            default:  error();
 
             }
-
-            return;
-
         }
-
     }
 
 
@@ -250,7 +226,7 @@ int factor() {
     else if (token == LP) {
         get_token();
 
-        
+
         r = expr();
         //printf("%d", r);
         if (token == RP)
@@ -272,5 +248,5 @@ void main() {
 int error() {
 
     printf("SYNTAX error!\n");
-    return -1;
+    exit(1);
 }
